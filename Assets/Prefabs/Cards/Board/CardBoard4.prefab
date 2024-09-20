@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2803364699894029912, guid: 244360038b78c2e42a3bf4703eee0020, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 1885449595
+      objectReference: {fileID: 0}
     - target: {fileID: 3382765250215913300, guid: 244360038b78c2e42a3bf4703eee0020, type: 3}
       propertyPath: m_Name
       value: CardBoard4

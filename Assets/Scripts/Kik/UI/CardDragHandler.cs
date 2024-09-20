@@ -1,7 +1,9 @@
+using Unity.Netcode;
+
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CardDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class CardDragHandler : NetworkBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     private CellFinder cellFinder;
 
@@ -49,9 +51,40 @@ public class CardDragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     private void SnapToCell(Cell cell)
     {
+        Vector3 cellPosition = cell.transform.localPosition;
+
+        if (IsServer)
+        {
+            SpawnCard(cellPosition);
+        }
+        else
+        {
+            SpawnCardServerRpc(cellPosition);
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SpawnCardServerRpc(Vector3 position, ServerRpcParams rpcParams = default)
+    {
+        SpawnCard(position, rpcParams);
+    }
+
+    public void SpawnCard(Vector3 position, ServerRpcParams rpcParams = default)
+    {
         CardUI cardUI = gameObject.GetComponent<CardUI>();
-        GameObject newBoardCard = Instantiate(cardUI.Card.CardReference, cell.transform.localPosition, Quaternion.identity);
-        newBoardCard.transform.SetParent(cell.transform);
+        GameObject newBoardCard = Instantiate(cardUI.Card.CardReference, position, Quaternion.identity);
+        if (newBoardCard.TryGetComponent(out NetworkObject networkObject))
+        {
+            networkObject.SpawnWithOwnership(rpcParams.Receive.SenderClientId);
+            Debug.Log($"GameObject {newBoardCard.name} spawned, Owner : {rpcParams.Receive.SenderClientId}");
+        }
+
+        DeleteClientCardClientRpc();
+    }
+
+    [ClientRpc]
+    private void DeleteClientCardClientRpc()
+    {
         Destroy(gameObject);
     }
 }

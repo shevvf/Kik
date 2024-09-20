@@ -97,3 +97,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d4806a416868224dae4812e58041975, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <CellModel>k__BackingField:
+    <CellId>k__BackingField: 0
+    <IsEmpty>k__BackingField: 0

@@ -5,9 +5,11 @@ using Cysharp.Threading.Tasks;
 
 using Kik.UI;
 
+using Unity.Netcode;
+
 using UnityEngine;
 
-public class CardBoard : MonoBehaviour
+public class CardBoard : NetworkBehaviour
 {
     private CardPanel cardPanel;
     private CellFinder cellFinder;
@@ -82,6 +84,8 @@ public class CardBoard : MonoBehaviour
 
     private void DetectTouch(Vector3 position)
     {
+        if (!IsOwner) return;
+
         RaycastHit2D hit = Physics2D.Raycast(position, Vector2.zero);
 
         if (hit.collider != null && hit.collider.gameObject == gameObject)
@@ -123,7 +127,7 @@ public class CardBoard : MonoBehaviour
         Cell overlappingCell = cellFinder.FindCellUnderCard(transform);
         if (overlappingCell != null)
         {
-            SnapToCell(overlappingCell);
+            SnapToCell(overlappingCell.transform.position);
         }
         else
         {
@@ -131,9 +135,16 @@ public class CardBoard : MonoBehaviour
         }
     }
 
-    private void SnapToCell(Cell cell)
+    public void SnapToCell(Vector3 cellPosition)
     {
-        transform.position = cell.transform.position;
-        transform.SetParent(cell.transform);
+        transform.position = cellPosition;
+
+        //  SnapToCellClientRpc(cellPosition);
     }
+
+    //[ClientRpc]
+    //private void SnapToCellClientRpc(Vector3 cellPosition)
+    //{
+    //    transform.position = cellPosition;
+    //}
 }
