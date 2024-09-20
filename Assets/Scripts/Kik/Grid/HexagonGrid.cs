@@ -6,8 +6,10 @@ public class HexagonGrid : MonoBehaviour
     [SerializeField] private int gridRadius = 4;
     [SerializeField] private bool randomColor = false;
 
+    private int cellId;
     private float hexWidth;
     private float hexHeight;
+
 
     private void Start()
     {
@@ -23,9 +25,14 @@ public class HexagonGrid : MonoBehaviour
         {
             for (int r = Mathf.Max(-gridRadius, -q - gridRadius); r <= Mathf.Min(gridRadius, -q + gridRadius); r++)
             {
+
                 Vector3 position = HexToWorldPosition(q, r);
                 GameObject hex = Instantiate(hexPrefab, position, Quaternion.identity);
                 hex.transform.SetParent(transform);
+
+                Cell cellModel = hex.GetComponent<Cell>();
+                cellModel.CellModel.CellId = cellId;
+                cellId++;
 
                 if (!randomColor) continue;
 

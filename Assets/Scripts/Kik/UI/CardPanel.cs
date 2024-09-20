@@ -1,3 +1,5 @@
+using Unity.Netcode;
+
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,17 +23,27 @@ namespace Kik.UI
 
         private void RotateLeft()
         {
-            Rotate(Quaternion.Euler(0, 0, 60));
+            RequestRotationServerRpc(Quaternion.Euler(0, 0, 60));
         }
 
         private void RotateRight()
         {
-            Rotate(Quaternion.Euler(0, 0, -60));
+            RequestRotationServerRpc(Quaternion.Euler(0, 0, -60));
         }
 
-        private void Rotate(Quaternion quaternion)
+        [ServerRpc]
+        private void RequestRotationServerRpc(Quaternion rotation, ServerRpcParams rpcParams = default)
         {
-            CurrentSolider.transform.rotation *= quaternion;
+            RotateClientRpc(rotation);
+        }
+
+        [ClientRpc]
+        private void RotateClientRpc(Quaternion rotation)
+        {
+            if (CurrentSolider != null)
+            {
+                CurrentSolider.transform.rotation *= rotation;
+            }
         }
 
         private void Close()

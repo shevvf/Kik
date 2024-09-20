@@ -10,7 +10,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3382765250215913300, guid: 244360038b78c2e42a3bf4703eee0020, type: 3}
       propertyPath: m_Name
-      value: CardBoardDefault
+      value: CardBoard1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4130124051203314581, guid: 244360038b78c2e42a3bf4703eee0020, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4130124051203314581, guid: 244360038b78c2e42a3bf4703eee0020, type: 3}
       propertyPath: m_LocalPosition.x
